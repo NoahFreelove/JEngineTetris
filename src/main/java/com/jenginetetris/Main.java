@@ -7,6 +7,7 @@ import com.JEngine.Game.Visual.GameWindow;
 import com.JEngine.Utility.About.GameInfo;
 import com.jenginetetris.Scenes.MainMenu;
 import javafx.application.Application;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -20,10 +21,15 @@ public class Main extends Application {
 
         GameWindow win = new GameWindow(mainMenu, 1f, GameInfo.getAppName(), stage);
         new GameCamera(Vector3.emptyVector(), win, mainMenu, null, new Identity("MainCamera"));
-
-        win.start();
+        win.setBackgroundColor(Color.BLACK);
 
     }
+
+    public static void startGame(){
+
+    }
+
+
 
     public static void main(String[] args) {
         launch();
