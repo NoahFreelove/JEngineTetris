@@ -35,11 +35,11 @@ public class MainMenu extends GameScene {
         text.setScaleX(5);
         text.setScaleY(5);
         text.setStyle("-fx-font-weight: bold;");
-        text.setX(1280/2 - text.getLayoutBounds().getWidth()/2);
+        text.setX(250);
         text.setY(100);
         addUI(text);
 
-        addUI(new MenuButton(new Vector2(1280 / 2 - 64, 200), 1, "Play", Color.CYAN, Color.WHITE, event -> Main.startGame()));
+        addUI(new MenuButton(new Vector2(215, 200), 1, "Play", Color.CYAN, Color.WHITE, event -> Main.startGame()));
 
 
     }

@@ -4,16 +4,26 @@ import com.JEngine.Core.Identity;
 import com.JEngine.Core.Position.Vector3;
 import com.JEngine.Game.Visual.GameCamera;
 import com.JEngine.Game.Visual.GameWindow;
+import com.JEngine.Game.Visual.Scenes.GameScene;
+import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.Utility.About.GameInfo;
+import com.JEngine.Utility.Misc.GameUtility;
+import com.jenginetetris.Game.GameManager;
+import com.jenginetetris.Game.Tetris;
+import com.jenginetetris.Game.TetrisType;
 import com.jenginetetris.Scenes.MainMenu;
 import javafx.application.Application;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     public static MainMenu mainMenu = new MainMenu();
+    public static GameManager gameScene = new GameManager();
+    public static Stage stage;
     @Override
     public void start(Stage stage) {
+        Main.stage = stage;
         GameInfo.setAppName("JEngine Tetris");
         GameInfo.setAuthors(new String[]{"Noah Freelove"});
         GameInfo.setAppVersionMajor(0);
@@ -23,10 +33,32 @@ public class Main extends Application {
         new GameCamera(Vector3.emptyVector(), win, mainMenu, null, new Identity("MainCamera"));
         win.setBackgroundColor(Color.BLACK);
 
+        // add key press event
+        stage.addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED, (e) -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
+                GameUtility.exitApp();
+            }
+            if (e.getCode() == KeyCode.LEFT)
+            {
+                GameManager.moveLeft();
+            }
+            if (e.getCode() == KeyCode.RIGHT)
+            {
+                GameManager.moveRight();
+            }
+            if(e.getCode() == KeyCode.SPACE)
+            {
+                gameScene.addTetris(new Tetris(TetrisType.REVERSEZ, 5,5));
+            }
+        });
+        stage.setWidth(GameManager.blockSize*GameManager.width + GameManager.borderLength*2);
     }
 
     public static void startGame(){
-
+        SceneManager.switchScene(gameScene);
+        gameScene.StartGame();
+        Tetris t = new Tetris(TetrisType.Z, 5, 5);
+        gameScene.addTetris(t);
     }
 
 
