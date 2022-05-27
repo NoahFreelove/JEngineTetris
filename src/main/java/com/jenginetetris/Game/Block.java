@@ -6,13 +6,14 @@ import com.JEngine.Core.Position.Transform;
 import com.JEngine.Core.Position.Vector3;
 import com.JEngine.Game.PlayersAndPawns.Pawn;
 import com.JEngine.Utility.ImageProcessing.GenerateSolidTexture;
+import com.jenginetetris.Scenes.GameManager;
 
 public class Block extends Pawn {
     private Tetris parent;
     private int x,y;
     public Block(int x, int y, Tetris parent) {
         super(Transform.simpleTransform(new Vector3(GameManager.borderLength + x*GameManager.blockSize, GameManager.borderHeight + y*GameManager.blockSize)),
-                new GameImage(GenerateSolidTexture.generateImage(32,32,0xFF00FF00)), new Identity("block"));
+                new GameImage(GenerateSolidTexture.generateImage(32,32,parent.getBlockColor())), new Identity("block"));
         this.parent = parent;
         this.x = x;
         this.y = y;
@@ -43,6 +44,7 @@ public class Block extends Pawn {
     }
 
     public boolean requestMove(int deltaX, int deltaY) {
+
         if(x + deltaX < 0 || x + deltaX >= GameManager.width || y + deltaY < 0 || y + deltaY >= GameManager.height)
             return false;
         if(GameManager.blocks[x+deltaX][y+deltaY] == null){
@@ -55,6 +57,9 @@ public class Block extends Pawn {
     }
 
     public void move(int deltaX, int deltaY) {
+        if(GameManager.blocks[x][y] == null){
+            return;
+        }
         GameManager.blocks[x][y] = null;
         x += deltaX;
         y += deltaY;

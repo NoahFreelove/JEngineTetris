@@ -1,6 +1,7 @@
 package com.jenginetetris.Game;
 
 import com.jenginetetris.Main;
+import com.jenginetetris.Scenes.GameManager;
 import javafx.scene.paint.Color;
 
 public class Tetris {
@@ -9,7 +10,7 @@ public class Tetris {
     private int x, y;
     private int rotation;
     private boolean isFalling;
-    private Color blockColor;
+    private int blockColor;
     private boolean hasMovedThisTick;
     public Tetris(TetrisType type, int x, int y) {
         this.type = type;
@@ -23,16 +24,20 @@ public class Tetris {
         isFalling = true;
     }
 
+    public Tetris(int x, int y) {
+        this(TetrisType.values()[(int) (Math.random() * TetrisType.values().length)], x, y);
+    }
+
     private void determineColor(){
         switch (type)
         {
-            case T -> blockColor = Color.RED;
-            case L -> blockColor = Color.BLUE;
-            case Z -> blockColor = Color.GREEN;
-            case SQUARE -> blockColor = Color.YELLOW;
-            case STRAIGHT -> blockColor = Color.ORANGE;
-            case REVERSEL -> blockColor = Color.PURPLE;
-            case REVERSEZ -> blockColor = Color.BROWN;
+            case T -> blockColor = 0xFFFF00FF;
+            case L -> blockColor = 0xFFFFA500;
+            case Z -> blockColor = 0xFF00FF00;
+            case SQUARE -> blockColor = 0xFFFF00FF;
+            case STRAIGHT -> blockColor =  0xFF00FFFF;
+            case REVERSEL -> blockColor = 0xFF0000FF;
+            case REVERSEZ -> blockColor = 0xFFFF0000;
         }
     }
     public void generateChildren(){
@@ -42,7 +47,7 @@ public class Tetris {
                 blocks[0] = new Block(x, y, this);
                 blocks[1] = new Block(x, y+1, this);
                 blocks[2] = new Block(x, y+2, this);
-                blocks[3] = new Block(x+1, y, this);
+                blocks[3] = new Block(x+1, y+2, this);
             }
             case T -> {
                 blocks[0] = new Block(x, y, this);
@@ -78,10 +83,10 @@ public class Tetris {
             }
             case REVERSEL ->
             {
-                blocks[0] = new Block(x, y, this);
-                blocks[1] = new Block(x+1, y, this);
-                blocks[2] = new Block(x+1, y+2, this);
-                blocks[3] = new Block(x+1, y+3, this);
+                blocks[0] = new Block(x, y+2, this);
+                blocks[1] = new Block(x+1, y+2, this);
+                blocks[2] = new Block(x+1, y+1, this);
+                blocks[3] = new Block(x+1, y, this);
             }
         }
     }
@@ -99,17 +104,25 @@ public class Tetris {
 
     public boolean requestMove(int deltaX, int deltaY){
         for(Block block : blocks){
+            if(block == null)
+                continue;
             if(!block.requestMove(deltaX, deltaY))
             {
                 if(deltaY != 0)
                 {
-                    GameManager.activeTetrisHitGround();
+                    if(GameManager.activeTetris == this)
+                    {
+                        GameManager.activeTetrisHitGround();
+                    }
                     isFalling = false;
+
                 }
                 return false;
             }
         }
         for (Block block : blocks) {
+            if(block == null)
+                continue;
             block.move(deltaX, deltaY);
         }
         x += deltaX;
@@ -129,7 +142,7 @@ public class Tetris {
         return blocks;
     }
 
-    public Color getBlockColor() {
+    public int getBlockColor() {
         return blockColor;
     }
 
@@ -137,4 +150,41 @@ public class Tetris {
         return isFalling;
     }
 
+    public TetrisType getType() {
+        return type;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public boolean isHasMovedThisTick() {
+        return hasMovedThisTick;
+    }
+
+    public void removeBlock(Block b) {
+        for (int i = 0; i < blocks.length; i++) {
+            if (blocks[i] == b) {
+                System.out.println("found block");
+                blocks[i] = null;
+            }
+        }
+    }
+
+    public int getNotNulls() {
+        int count = 0;
+        for (Block block : blocks) {
+            if (block != null)
+                count++;
+        }
+        return count;
+    }
 }

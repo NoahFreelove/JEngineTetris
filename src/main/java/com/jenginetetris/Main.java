@@ -4,13 +4,12 @@ import com.JEngine.Core.Identity;
 import com.JEngine.Core.Position.Vector3;
 import com.JEngine.Game.Visual.GameCamera;
 import com.JEngine.Game.Visual.GameWindow;
-import com.JEngine.Game.Visual.Scenes.GameScene;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.Utility.About.GameInfo;
 import com.JEngine.Utility.Misc.GameUtility;
-import com.jenginetetris.Game.GameManager;
-import com.jenginetetris.Game.Tetris;
 import com.jenginetetris.Game.TetrisType;
+import com.jenginetetris.Scenes.GameManager;
+import com.jenginetetris.Game.Tetris;
 import com.jenginetetris.Scenes.MainMenu;
 import javafx.application.Application;
 import javafx.scene.input.KeyCode;
@@ -48,7 +47,7 @@ public class Main extends Application {
             }
             if(e.getCode() == KeyCode.SPACE)
             {
-                gameScene.addTetris(new Tetris(TetrisType.REVERSEZ, 5,5));
+                gameScene.addTetris(new Tetris(TetrisType.REVERSEL, 5,0));
             }
         });
         stage.setWidth(GameManager.blockSize*GameManager.width + GameManager.borderLength*2);
@@ -57,8 +56,9 @@ public class Main extends Application {
     public static void startGame(){
         SceneManager.switchScene(gameScene);
         gameScene.StartGame();
-        Tetris t = new Tetris(TetrisType.Z, 5, 5);
-        gameScene.addTetris(t);
+        gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 6, 5));
+        gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 0, 5));
+
     }
 
 

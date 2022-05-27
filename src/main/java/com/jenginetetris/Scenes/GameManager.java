@@ -1,7 +1,10 @@
-package com.jenginetetris.Game;
+package com.jenginetetris.Scenes;
 
 import com.JEngine.Game.Visual.Scenes.GameScene;
+import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.Utility.Misc.GameTimer;
+import com.jenginetetris.Game.Block;
+import com.jenginetetris.Game.Tetris;
 
 import java.util.ArrayList;
 
@@ -25,7 +28,7 @@ public class GameManager extends GameScene {
 
     public void StartGame(){
         blocks = new Block[width][height];
-        gt = new GameTimer(500, args -> {
+        gt = new GameTimer(100, args -> {
             if(!isPaused){
                 updateBlocks();
             }
@@ -43,6 +46,7 @@ public class GameManager extends GameScene {
         t.addToScene();
         activeTetris = t;
     }
+
     void updateBlocks(){
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
@@ -60,15 +64,79 @@ public class GameManager extends GameScene {
                 }
             }
         }
-        updateBlockArray();
         //printASCII();
-        resetHasMovedStatus();
+        checkLines();
     }
+
+    public void checkLines(){
+        int totalLines = 0;
+        for(int y = 0; y < height; y++){
+            boolean isLine = true;
+            for(int x = 0; x < width; x++){
+                if(blocks[x][y] == null){
+                    isLine = false;
+                    break;
+                }
+            }
+            updateBlockArray();
+
+            if(isLine){
+                for (int i = 0; i < width; i++) {
+                    for (Tetris t : allTetris) {
+                        if(blocks[i][y] != null)
+                        {
+                            SceneManager.getActiveScene().remove(blocks[i][y]);
+                            t.removeBlock(blocks[i][y]);
+                            blocks[i][y] = null;
+                        }
+                    }
+                }
+                totalLines++;
+            }
+        }
+        updateBlockArray();
+
+        if(totalLines > 0){
+            for(int y = 0; y < height; y++){
+                for(int x = 0; x < width; x++){
+                    if(blocks[x][y] != null){
+                        blocks[x][y].getParent().requestMove(0, totalLines);
+                    }
+                }
+            }
+            printASCII();
+
+            updateBlockArray();
+
+            printASCII();
+
+        }
+    }
+
+    // When some blocks move down they can overwrite their children, so we need to update the array
     void updateBlockArray(){
         blocks = new Block[width][height];
         for(Tetris t: allTetris){
+            boolean allNull = true;
             for (Block b: t.getBlocks()) {
-                blocks[b.getX()][b.getY()] = b;
+                if(b == null)
+                {
+                    System.out.println("Block is null " + t.getType());
+                    continue;
+                }
+                if (b.getX() >= 0 && b.getX() < width && b.getY() >= 0 && b.getY() < height)
+                {
+                    blocks[b.getX()][b.getY()] = b;
+                    allNull = false;
+                }
+            }
+
+            if(allNull)
+            {
+                //System.out.println("All null");
+                allTetris.remove(t);
+            }else {
+                //System.out.println("Not all null" + t.getType());
             }
         }
     }
@@ -77,6 +145,7 @@ public class GameManager extends GameScene {
         activeTetris = null;
     }
 
+    // helpful debugging method
     void printASCII(){
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
@@ -92,6 +161,8 @@ public class GameManager extends GameScene {
 
     }
 
+    // reset the move status on the blocks
+    // there is a hasMoved status on Tetris's  (tetri?) so we don't update it twice.
     void resetHasMovedStatus(){
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
