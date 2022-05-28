@@ -43,6 +43,12 @@ public class Block extends Pawn {
         this.y = y;
     }
 
+    public void setPos(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        this.getTransform().setPosition(new Vector3(GameManager.borderLength + x*GameManager.blockSize, GameManager.borderHeight + y*GameManager.blockSize));
+    }
     public boolean requestMove(int deltaX, int deltaY) {
 
         if(x + deltaX < 0 || x + deltaX >= GameManager.width || y + deltaY < 0 || y + deltaY >= GameManager.height)
@@ -51,6 +57,19 @@ public class Block extends Pawn {
             return true;
         }
         if(GameManager.blocks[x+deltaX][y+deltaY].getParent() == getParent()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean requestMoveAbsolute(int absX, int absY) {
+
+        if(absX < 0 || absX >= GameManager.width || absY < 0 ||  absY >= GameManager.height)
+            return false;
+        if(GameManager.blocks[absX][absY] == null || !GameManager.blocks[absX][absY].getActive()) {
+            return true;
+        }
+        if(GameManager.blocks[absX][absY].getParent() == getParent()){
             return true;
         }
         return false;

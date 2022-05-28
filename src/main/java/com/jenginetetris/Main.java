@@ -7,9 +7,9 @@ import com.JEngine.Game.Visual.GameWindow;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.Utility.About.GameInfo;
 import com.JEngine.Utility.Misc.GameUtility;
+import com.jenginetetris.Game.Tetris;
 import com.jenginetetris.Game.TetrisType;
 import com.jenginetetris.Scenes.GameManager;
-import com.jenginetetris.Game.Tetris;
 import com.jenginetetris.Scenes.MainMenu;
 import javafx.application.Application;
 import javafx.scene.input.KeyCode;
@@ -21,6 +21,7 @@ public class Main extends Application {
     public static GameManager gameScene = new GameManager();
     public static Stage stage;
     static Tetris specialT;
+
     @Override
     public void start(Stage stage) {
         Main.stage = stage;
@@ -38,18 +39,12 @@ public class Main extends Application {
             if (e.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
                 GameUtility.exitApp();
             }
-            if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
-                GameManager.moveLeft();
-            }
-            if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D)
-            {
-                GameManager.moveRight();
-            }
-            if(e.getCode() == KeyCode.SPACE)
+
+            /*if(e.getCode() == KeyCode.SPACE)
             {
                 specialT = new Tetris(TetrisType.SQUARE, 5,0);
                 gameScene.addTetris(specialT);
-            }
+            }*/
             if(e.getCode() == KeyCode.F1)
             {
                 GameManager.printASCII();
@@ -65,16 +60,13 @@ public class Main extends Application {
     public static void startGame(){
         SceneManager.switchScene(gameScene);
         gameScene.StartGame();
-        gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 4, 5));
-        gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 4, 7));
+        gameScene.addTetris(new Tetris(4, 0));
+        /*gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 4, 7));
         gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 4, 10));
         gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 0, 5));
         gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 0, 7));
-        gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 0, 10));
-
+        gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, 0, 10));*/
     }
-
-
 
     public static void main(String[] args) {
         launch();

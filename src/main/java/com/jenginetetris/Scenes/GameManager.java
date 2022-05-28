@@ -6,6 +6,9 @@ import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.Utility.Misc.GameTimer;
 import com.jenginetetris.Game.Block;
 import com.jenginetetris.Game.Tetris;
+import com.jenginetetris.Game.TetrisController;
+import com.jenginetetris.Game.TetrisType;
+import com.jenginetetris.Main;
 
 import java.util.ArrayList;
 
@@ -29,7 +32,8 @@ public class GameManager extends GameScene {
 
     public void StartGame(){
         blocks = new Block[width][height];
-        gt = new GameTimer(100, args -> {
+        add(new TetrisController());
+        gt = new GameTimer(800, args -> {
             if(!isPaused){
                 updateBlocks();
             }
@@ -39,7 +43,6 @@ public class GameManager extends GameScene {
 
     public void addTetris(Tetris t){
         allTetris.add(t);
-        System.out.println("Added tetris");
         for (Block b: t.getBlocks()) {
             blocks[b.getX()][b.getY()] = b;
             //System.out.println("Added block at " + b.getX() + " " + b.getY());
@@ -49,12 +52,12 @@ public class GameManager extends GameScene {
     }
 
     void updateBlocks(){
-        for(int x = 0; x < width; x++){
-            for(int y = 0; y < height; y++){
+        for(int x = width-1; x > -1; x--){
+            for(int y = height-1; y >-1; y--){
                 if(blocks[x][y] != null){
                     if(blocks[x][y].getParent() !=null){
-                        if(!blocks[x][y].getParent().isFalling())
-                            continue;
+                        /*if(!blocks[x][y].getParent().isFalling())
+                            continue;*/
                         if(!blocks[x][y].getParent().hasMovedThisTick())
                         {
                             blocks[x][y].getParent().setHasMovedThisTick(true);
@@ -105,7 +108,7 @@ public class GameManager extends GameScene {
         }
         updateBlockArrayBasedOnSceneContent();
         if(totalLines > 0){
-            printASCII();
+            //printASCII();
             for(int y = 0; y < height; y++){
                 for(int x = 0; x < width; x++){
                     if(blocks[x][y] != null){
@@ -113,9 +116,7 @@ public class GameManager extends GameScene {
                     }
                 }
             }
-            printASCII();
-
-
+            //printASCII();
         }
     }
     // When some blocks move down they can overwrite their children, so we need to update the array
@@ -160,6 +161,8 @@ public class GameManager extends GameScene {
 
     public static void activeTetrisHitGround(){
         activeTetris = null;
+        // Create new random block
+        Main.gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, width/2,0));
     }
 
     // helpful debugging method
@@ -201,6 +204,17 @@ public class GameManager extends GameScene {
     public static void moveRight(){
         if(activeTetris !=null) {
             activeTetris.requestMove(1, 0);
+        }
+    }
+    public static void moveDown(){
+        if(activeTetris !=null) {
+            activeTetris.requestMove(0, 1);
+        }
+    }
+
+    public static void rotate(){
+        if(activeTetris !=null) {
+            activeTetris.rotate();
         }
     }
 

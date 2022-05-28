@@ -2,7 +2,6 @@ package com.jenginetetris.Game;
 
 import com.jenginetetris.Main;
 import com.jenginetetris.Scenes.GameManager;
-import javafx.scene.paint.Color;
 
 public class Tetris {
     private TetrisType type;
@@ -36,8 +35,8 @@ public class Tetris {
             case Z -> blockColor = 0xFF00FF00;
             case SQUARE -> blockColor = 0xFFFF00FF;
             case STRAIGHT -> blockColor =  0xFF00FFFF;
-            case REVERSEL -> blockColor = 0xFF0000FF;
-            case REVERSEZ -> blockColor = 0xFFFF0000;
+            case J -> blockColor = 0xFF0000FF;
+            case S -> blockColor = 0xFFFF0000;
         }
     }
     public void generateChildren(){
@@ -61,7 +60,7 @@ public class Tetris {
                 blocks[2] = new Block(x+1, y+1, this);
                 blocks[3] = new Block(x+2, y+1, this);
             }
-            case REVERSEZ -> {
+            case S -> {
                 blocks[0] = new Block(x, y+1, this);
                 blocks[1] = new Block(x+1, y+1, this);
                 blocks[2] = new Block(x+1, y, this);
@@ -77,11 +76,11 @@ public class Tetris {
             case STRAIGHT ->
             {
                 blocks[0] = new Block(x, y, this);
-                blocks[1] = new Block(x+1, y, this);
-                blocks[2] = new Block(x+2, y, this);
-                blocks[3] = new Block(x+3, y, this);
+                blocks[1] = new Block(x, y+1, this);
+                blocks[2] = new Block(x, y+2, this);
+                blocks[3] = new Block(x, y+3, this);
             }
-            case REVERSEL ->
+            case J ->
             {
                 blocks[0] = new Block(x, y+2, this);
                 blocks[1] = new Block(x+1, y+2, this);
@@ -128,6 +127,14 @@ public class Tetris {
         x += deltaX;
         y += deltaY;
         return true;
+    }
+    public void rotate(){
+        if(!isFalling)
+            return;
+        rotation+=90;
+        if(rotation >= 360)
+            rotation = 0;
+        TetrisRotator.rotateBlocks(blocks, rotation, this);
     }
 
     public boolean hasMovedThisTick() {
@@ -191,4 +198,10 @@ public class Tetris {
     public void setFalling(boolean falling) {
         isFalling = falling;
     }
+
+    private void faceDown(){
+
+    }
+    private void faceLeft(){}
+    private void faceRight(){}
 }
