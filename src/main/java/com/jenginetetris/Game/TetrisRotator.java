@@ -350,7 +350,94 @@ public class TetrisRotator {
                     }
                 }
             }
-            case Z -> {}
+            case Z -> {
+                switch (rotation) {
+                    case 0,180,360 -> {
+                        boolean couldNotRotate = false;
+                        for (int i = 0; i < blocks.length; i++) {
+                            if (i == 0) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX(), t.getY())) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 1) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX()+1 , t.getY())) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 2) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX()+1, t.getY() + 1)) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 3) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX() + 2, t.getY()+1)) {
+                                    couldNotRotate = true;
+                                }
+                            }
+                        }
+                        if (!couldNotRotate) {
+                            for (int i = 0; i < blocks.length; i++) {
+                                if(i == 0)
+                                {
+                                    blocks[i].setPos(t.getX(), t.getY());
+                                }
+                                else if(i == 1)
+                                {
+                                    blocks[i].setPos(t.getX()+1, t.getY());
+                                }
+                                else if(i == 2)
+                                {
+                                    blocks[i].setPos(t.getX()+1, t.getY()+1);
+                                }
+                                else if(i == 3)
+                                {
+                                    blocks[i].setPos(t.getX() + 2, t.getY()+1);
+                                }
+                            }
+                        }
+                    }
+                    case 90,270 -> {
+                        boolean couldNotRotate = false;
+                        for (int i = 0; i < blocks.length; i++) {
+                            if (i == 0) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX(), t.getY())) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 1) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX()+1, t.getY())) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 2) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX() + 1, t.getY()-1)) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 3) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX(), t.getY()+1)) {
+                                    couldNotRotate = true;
+                                }
+                            }
+                        }
+                        if (!couldNotRotate) {
+                            for (int i = 0; i < blocks.length; i++) {
+                                if(i == 0)
+                                {
+                                    blocks[i].setPos(t.getX(), t.getY());
+                                }
+                                else if(i == 1)
+                                {
+                                    blocks[i].setPos(t.getX()+1, t.getY());
+                                }
+                                else if(i == 2)
+                                {
+                                    blocks[i].setPos(t.getX() +1, t.getY()-1);
+                                }
+                                else if(i == 3)
+                                {
+                                    blocks[i].setPos(t.getX(), t.getY()+1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             case SQUARE -> {
                 // square doesn't rotate
             }
@@ -562,7 +649,94 @@ public class TetrisRotator {
                     }
                 }
             }
-            case S -> {}
+            case S -> {
+                switch (rotation) {
+                    case 0,180,360 -> {
+                        boolean couldNotRotate = false;
+                        for (int i = 0; i < blocks.length; i++) {
+                            if (i == 0) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX(), t.getY()+1)) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 1) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX()+1 , t.getY()+1)) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 2) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX()+1, t.getY())) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 3) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX() + 2, t.getY())) {
+                                    couldNotRotate = true;
+                                }
+                            }
+                        }
+                        if (!couldNotRotate) {
+                            for (int i = 0; i < blocks.length; i++) {
+                                if(i == 0)
+                                {
+                                    blocks[i].setPos(t.getX(), t.getY()+1);
+                                }
+                                else if(i == 1)
+                                {
+                                    blocks[i].setPos(t.getX()+1, t.getY()+1);
+                                }
+                                else if(i == 2)
+                                {
+                                    blocks[i].setPos(t.getX()+1, t.getY());
+                                }
+                                else if(i == 3)
+                                {
+                                    blocks[i].setPos(t.getX() + 2, t.getY());
+                                }
+                            }
+                        }
+                    }
+                    case 90,270 -> {
+                        boolean couldNotRotate = false;
+                        for (int i = 0; i < blocks.length; i++) {
+                            if (i == 0) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX(), t.getY())) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 1) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX()+1, t.getY())) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 2) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX(), t.getY()-1)) {
+                                    couldNotRotate = true;
+                                }
+                            } else if (i == 3) {
+                                if (!blocks[i].requestMoveAbsolute(t.getX()+1, t.getY()+1)) {
+                                    couldNotRotate = true;
+                                }
+                            }
+                        }
+                        if (!couldNotRotate) {
+                            for (int i = 0; i < blocks.length; i++) {
+                                if(i == 0)
+                                {
+                                    blocks[i].setPos(t.getX(), t.getY());
+                                }
+                                else if(i == 1)
+                                {
+                                    blocks[i].setPos(t.getX()+1, t.getY());
+                                }
+                                else if(i == 2)
+                                {
+                                    blocks[i].setPos(t.getX(), t.getY()-1);
+                                }
+                                else if(i == 3)
+                                {
+                                    blocks[i].setPos(t.getX()+1, t.getY()+1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
