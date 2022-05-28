@@ -1,5 +1,6 @@
 package com.jenginetetris.Scenes;
 
+import com.JEngine.Core.GameObject;
 import com.JEngine.Game.Visual.Scenes.GameScene;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.Utility.Misc.GameTimer;
@@ -38,7 +39,7 @@ public class GameManager extends GameScene {
 
     public void addTetris(Tetris t){
         allTetris.add(t);
-
+        System.out.println("Added tetris");
         for (Block b: t.getBlocks()) {
             blocks[b.getX()][b.getY()] = b;
             //System.out.println("Added block at " + b.getX() + " " + b.getY());
@@ -64,8 +65,10 @@ public class GameManager extends GameScene {
                 }
             }
         }
+        updateBlockArrayBasedOnSceneContent();
         //printASCII();
         checkLines();
+        resetHasMovedStatus();
     }
 
     public void checkLines(){
@@ -76,15 +79,21 @@ public class GameManager extends GameScene {
                 if(blocks[x][y] == null){
                     isLine = false;
                     break;
+                }else {
+                    if(blocks[x][y].getParent().isFalling())
+                    {
+                        isLine = false;
+                        break;
+                    }
                 }
             }
-            updateBlockArray();
 
             if(isLine){
                 for (int i = 0; i < width; i++) {
                     for (Tetris t : allTetris) {
                         if(blocks[i][y] != null)
                         {
+                            blocks[i][y].setActive(false);
                             SceneManager.getActiveScene().remove(blocks[i][y]);
                             t.removeBlock(blocks[i][y]);
                             blocks[i][y] = null;
@@ -94,34 +103,42 @@ public class GameManager extends GameScene {
                 totalLines++;
             }
         }
-        updateBlockArray();
-
+        updateBlockArrayBasedOnSceneContent();
         if(totalLines > 0){
+            printASCII();
             for(int y = 0; y < height; y++){
                 for(int x = 0; x < width; x++){
                     if(blocks[x][y] != null){
-                        blocks[x][y].getParent().requestMove(0, totalLines);
+                        blocks[x][y].getParent().setFalling(true);
                     }
                 }
             }
             printASCII();
 
-            updateBlockArray();
-
-            printASCII();
 
         }
     }
-
     // When some blocks move down they can overwrite their children, so we need to update the array
-    void updateBlockArray(){
+    void updateBlockArrayBasedOnSceneContent(){
         blocks = new Block[width][height];
-        for(Tetris t: allTetris){
+        for (GameObject go: SceneManager.getActiveScene().getObjects()) {
+            if(go == null)
+                continue;
+            if(go instanceof Block && !go.isQueuedForDeletion() && go.getActive()){
+                Block b = (Block) go;
+                blocks[b.getX()][b.getY()] = b;
+            }
+        }
+    }
+
+    /*void updateBlockArray(){
+        blocks = new Block[width][height];
+        for(Tetris t: allTetris.toArray(new Tetris[0])){
             boolean allNull = true;
             for (Block b: t.getBlocks()) {
                 if(b == null)
                 {
-                    System.out.println("Block is null " + t.getType());
+                    //System.out.println("Block is null " + t.getType());
                     continue;
                 }
                 if (b.getX() >= 0 && b.getX() < width && b.getY() >= 0 && b.getY() < height)
@@ -133,20 +150,20 @@ public class GameManager extends GameScene {
 
             if(allNull)
             {
-                //System.out.println("All null");
+                System.out.println("All null");
                 allTetris.remove(t);
             }else {
                 //System.out.println("Not all null" + t.getType());
             }
         }
-    }
+    }*/
 
     public static void activeTetrisHitGround(){
         activeTetris = null;
     }
 
     // helpful debugging method
-    void printASCII(){
+    public static void printASCII(){
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
                 if(blocks[x][y] != null){

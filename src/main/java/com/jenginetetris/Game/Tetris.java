@@ -104,7 +104,7 @@ public class Tetris {
 
     public boolean requestMove(int deltaX, int deltaY){
         for(Block block : blocks){
-            if(block == null)
+            if(block == null || block.isQueuedForDeletion() || !block.getActive())
                 continue;
             if(!block.requestMove(deltaX, deltaY))
             {
@@ -186,5 +186,9 @@ public class Tetris {
                 count++;
         }
         return count;
+    }
+
+    public void setFalling(boolean falling) {
+        isFalling = falling;
     }
 }

@@ -47,7 +47,7 @@ public class Block extends Pawn {
 
         if(x + deltaX < 0 || x + deltaX >= GameManager.width || y + deltaY < 0 || y + deltaY >= GameManager.height)
             return false;
-        if(GameManager.blocks[x+deltaX][y+deltaY] == null){
+        if(GameManager.blocks[x+deltaX][y+deltaY] == null || !GameManager.blocks[x+deltaX][y+deltaY].getActive()) {
             return true;
         }
         if(GameManager.blocks[x+deltaX][y+deltaY].getParent() == getParent()){
@@ -57,9 +57,9 @@ public class Block extends Pawn {
     }
 
     public void move(int deltaX, int deltaY) {
-        if(GameManager.blocks[x][y] == null){
+
+        if(x + deltaX < 0 || x + deltaX >= GameManager.width || y + deltaY < 0 || y + deltaY >= GameManager.height)
             return;
-        }
         GameManager.blocks[x][y] = null;
         x += deltaX;
         y += deltaY;
