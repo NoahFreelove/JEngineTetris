@@ -30,7 +30,7 @@ public class TetrisController extends Player {
         {
             GameManager.moveRight();
         }
-        else if(key == KeyCode.C)
+        else if(key == KeyCode.UP || key == KeyCode.W)
         {
             GameManager.rotate();
         }

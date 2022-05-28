@@ -162,7 +162,7 @@ public class GameManager extends GameScene {
     public static void activeTetrisHitGround(){
         activeTetris = null;
         // Create new random block
-        Main.gameScene.addTetris(new Tetris(TetrisType.STRAIGHT, width/2,0));
+        Main.gameScene.addTetris(new Tetris(TetrisType.J, width/2,0));
     }
 
     // helpful debugging method

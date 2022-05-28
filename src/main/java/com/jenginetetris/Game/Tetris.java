@@ -33,7 +33,7 @@ public class Tetris {
             case T -> blockColor = 0xFFFF00FF;
             case L -> blockColor = 0xFFFFA500;
             case Z -> blockColor = 0xFF00FF00;
-            case SQUARE -> blockColor = 0xFFFF00FF;
+            case SQUARE -> blockColor = 0xFFFFFF00;
             case STRAIGHT -> blockColor =  0xFF00FFFF;
             case J -> blockColor = 0xFF0000FF;
             case S -> blockColor = 0xFFFF0000;
