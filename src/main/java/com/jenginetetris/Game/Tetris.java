@@ -11,6 +11,7 @@ public class Tetris {
     private boolean isFalling;
     private int blockColor;
     private boolean hasMovedThisTick;
+    private boolean hasMovedLine;
     public Tetris(TetrisType type, int x, int y) {
         this.type = type;
         this.x = x;
@@ -205,4 +206,12 @@ public class Tetris {
     }
     private void faceLeft(){}
     private void faceRight(){}
+
+    public void setHasMovedLine(boolean b) {
+        hasMovedLine = b;
+    }
+
+    public boolean isHasMovedLine() {
+        return hasMovedLine;
+    }
 }

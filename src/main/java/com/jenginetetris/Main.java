@@ -10,6 +10,7 @@ import com.JEngine.Utility.Misc.GameUtility;
 import com.jenginetetris.Game.Tetris;
 import com.jenginetetris.Game.TetrisType;
 import com.jenginetetris.Scenes.GameManager;
+import com.jenginetetris.Scenes.LoseScreen;
 import com.jenginetetris.Scenes.MainMenu;
 import javafx.application.Application;
 import javafx.scene.input.KeyCode;
@@ -58,6 +59,7 @@ public class Main extends Application {
     }
 
     public static void startGame(){
+        gameScene = new GameManager();
         SceneManager.switchScene(gameScene);
         gameScene.StartGame();
         gameScene.addTetris(new Tetris(4, 0));

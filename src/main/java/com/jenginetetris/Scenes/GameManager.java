@@ -53,6 +53,7 @@ public class GameManager extends GameScene {
         gameNameText.setScaleY(2);
 
         addUI(gameNameText);
+        score = 0;
 
         scoreText = new Text("Score: " + score);
         scoreText.setTranslateX(420);
@@ -62,10 +63,12 @@ public class GameManager extends GameScene {
         scoreText.setScaleX(2);
         scoreText.setScaleY(2);
         addUI(scoreText);
+
     }
 
     public void StartGame(){
         score = 0;
+        isPaused = false;
         for (GameObject obj: Main.gameScene.getObjects()){
             if(obj instanceof Block)
             {
@@ -73,6 +76,7 @@ public class GameManager extends GameScene {
                 obj.setActive(false);
             }
         }
+        allTetris = new ArrayList<>(1);
         gameNameText.setText(GameInfo.getAppName());
         blocks = new Block[width][height];
         add(new TetrisController());
@@ -92,7 +96,12 @@ public class GameManager extends GameScene {
             {
              if(b.getY()<2)
              {
-                 SceneManager.switchScene(Main.mainMenu);
+                 if(!isPaused)
+                 {
+                     isPaused = true;
+                     LoseScreen.addScore(score);
+                     SceneManager.switchScene(new LoseScreen());
+                 }
              }
             }
             blocks[b.getX()][b.getY()] = b;
@@ -160,15 +169,28 @@ public class GameManager extends GameScene {
         updateBlockArrayBasedOnSceneContent();
         if(totalLines > 0){
             //printASCII();
-            for(int y = 0; y < height; y++){
+            /*for(int y = 0; y < height; y++){
                 for(int x = 0; x < width; x++){
                     if(blocks[x][y] != null){
                         blocks[x][y].getParent().setFalling(true);
                     }
                 }
+            }*/
+            for(int y = height-1; y > 0; y--){
+                for(int x = width-1; x > 0; x--){
+                    if(blocks[x][y] != null){
+
+                        if(!blocks[x][y].getParent().isHasMovedLine())
+                        {
+                            blocks[x][y].getParent().setHasMovedLine(true);
+                            blocks[x][y].getParent().requestMove(0,totalLines);
+                        }
+                    }
+                }
             }
             score += totalLines * 100L;
             scoreText.setText("Score: " + score);
+            resetHasMovedLineStatus();
             //printASCII();
         }
     }
@@ -246,6 +268,17 @@ public class GameManager extends GameScene {
                 if(blocks[x][y] != null){
                     if(blocks[x][y].getParent() !=null){
                         blocks[x][y].getParent().setHasMovedThisTick(false);
+                    }
+                }
+            }
+        }
+    }
+    void resetHasMovedLineStatus(){
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height; y++){
+                if(blocks[x][y] != null){
+                    if(blocks[x][y].getParent() !=null){
+                        blocks[x][y].getParent().setHasMovedLine(false);
                     }
                 }
             }
