@@ -35,4 +35,13 @@ public class TetrisController extends Player {
             GameManager.rotate();
         }
     }
+
+    @Override
+    public void onKeyReleased(KeyCode key)
+    {
+        if (key == KeyCode.C)
+        {
+            GameManager.holdTetris();
+        }
+    }
 }

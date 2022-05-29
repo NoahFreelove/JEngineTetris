@@ -39,7 +39,7 @@ public class MainMenu extends GameScene {
         text.setY(100);
         addUI(text);
 
-        addUI(new MenuButton(new Vector2(210, 200), 1, "Play", Color.CYAN, Color.WHITE, event -> Main.startGame()));
+        addUI(new MenuButton(new Vector2(210, 200), 1, "Play", Color.DARKGRAY, Color.WHITE, event -> Main.startGame()));
 
 
     }

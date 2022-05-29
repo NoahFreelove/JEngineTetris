@@ -20,11 +20,13 @@ public class GameManager extends GameScene {
     public static Block[][] blocks;
     public static ArrayList<Tetris> allTetris = new ArrayList<>(1);
     public static Tetris activeTetris;
+    public static TetrisType heldTetris = null;
+    public static TetrisType nextTetris;
     public static int width = 10;
     public static int height = 20;
 
     public static boolean isPaused = false;
-
+    public static boolean hasHeldThisTick = false;
     public static GameTimer gt;
     public GameManager() {
         super("Game Scene");
@@ -39,11 +41,19 @@ public class GameManager extends GameScene {
             }
         });
         gt.start();
+        nextTetris = new Tetris(width/2,0).getType();
     }
 
     public void addTetris(Tetris t){
         allTetris.add(t);
         for (Block b: t.getBlocks()) {
+            if(blocks[b.getX()][b.getY()] !=null)
+            {
+             if(b.getY()<2)
+             {
+                 SceneManager.switchScene(Main.mainMenu);
+             }
+            }
             blocks[b.getX()][b.getY()] = b;
             //System.out.println("Added block at " + b.getX() + " " + b.getY());
         }
@@ -131,38 +141,42 @@ public class GameManager extends GameScene {
             }
         }
     }
+    public static void addNextTetris(){
+        activeTetris = new Tetris(nextTetris, width/2,0);
+        Main.gameScene.addTetris(activeTetris);
 
-    /*void updateBlockArray(){
-        blocks = new Block[width][height];
-        for(Tetris t: allTetris.toArray(new Tetris[0])){
-            boolean allNull = true;
-            for (Block b: t.getBlocks()) {
-                if(b == null)
-                {
-                    //System.out.println("Block is null " + t.getType());
-                    continue;
-                }
-                if (b.getX() >= 0 && b.getX() < width && b.getY() >= 0 && b.getY() < height)
-                {
-                    blocks[b.getX()][b.getY()] = b;
-                    allNull = false;
-                }
-            }
-
-            if(allNull)
-            {
-                System.out.println("All null");
-                allTetris.remove(t);
-            }else {
-                //System.out.println("Not all null" + t.getType());
-            }
-        }
-    }*/
+    }
 
     public static void activeTetrisHitGround(){
         activeTetris = null;
         // Create new random block
-        Main.gameScene.addTetris(new Tetris( width/2,0));
+        nextTetris = new Tetris(width/2,0).getType();
+        addNextTetris();
+        hasHeldThisTick = false;
+    }
+
+    public static void holdTetris(){
+        if(hasHeldThisTick)
+            return;
+        hasHeldThisTick = true;
+        if(heldTetris == null){
+           heldTetris = activeTetris.getType();
+           activeTetris.remove();
+           allTetris.remove(activeTetris);
+           nextTetris = new Tetris(width/2,0).getType();
+        }
+        else {
+            TetrisType tmp = heldTetris;
+            heldTetris = activeTetris.getType();
+            activeTetris.remove();
+            allTetris.remove(activeTetris);
+            nextTetris = new Tetris(tmp, width/2,0).getType();
+
+        }
+        activeTetris = null;
+        Main.gameScene.updateBlockArrayBasedOnSceneContent();
+        addNextTetris();
+
     }
 
     // helpful debugging method

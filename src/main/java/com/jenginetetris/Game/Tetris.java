@@ -35,7 +35,7 @@ public class Tetris {
             case Z -> blockColor = 0xFF00FF00;
             case SQUARE -> blockColor = 0xFFFFFF00;
             case STRAIGHT -> blockColor =  0xFF00FFFF;
-            case J -> blockColor = 0xFF0000FF;
+            case J -> blockColor = 0xFFFFC0CB;
             case S -> blockColor = 0xFFFF0000;
         }
     }
@@ -96,8 +96,11 @@ public class Tetris {
         }
     }
     public void remove(){
+        int i = 0;
         for(Block block : blocks) {
             Main.gameScene.remove(block);
+            blocks[i] = null;
+            i++;
         }
     }
 
@@ -114,7 +117,6 @@ public class Tetris {
                         GameManager.activeTetrisHitGround();
                     }
                     isFalling = false;
-
                 }
                 return false;
             }
@@ -180,7 +182,6 @@ public class Tetris {
     public void removeBlock(Block b) {
         for (int i = 0; i < blocks.length; i++) {
             if (blocks[i] == b) {
-                System.out.println("found block");
                 blocks[i] = null;
             }
         }
