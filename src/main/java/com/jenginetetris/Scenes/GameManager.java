@@ -1,20 +1,29 @@
 package com.jenginetetris.Scenes;
 
+import com.JEngine.Core.GameImage;
 import com.JEngine.Core.GameObject;
+import com.JEngine.Core.Identity;
+import com.JEngine.Core.Position.Transform;
+import com.JEngine.Core.Position.Vector2;
+import com.JEngine.Game.PlayersAndPawns.Sprite;
 import com.JEngine.Game.Visual.Scenes.GameScene;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
+import com.JEngine.Utility.About.GameInfo;
+import com.JEngine.Utility.ImageProcessing.GenerateSolidTexture;
 import com.JEngine.Utility.Misc.GameTimer;
 import com.jenginetetris.Game.Block;
 import com.jenginetetris.Game.Tetris;
 import com.jenginetetris.Game.TetrisController;
 import com.jenginetetris.Game.TetrisType;
 import com.jenginetetris.Main;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
 public class GameManager extends GameScene {
     public static int borderLength = 100;
-    public static int borderHeight = 30;
+    public static int borderHeight = 18;
 
     public static int blockSize = 32;
     public static Block[][] blocks;
@@ -28,11 +37,43 @@ public class GameManager extends GameScene {
     public static boolean isPaused = false;
     public static boolean hasHeldThisTick = false;
     public static GameTimer gt;
+    private Text gameNameText;
+    private Text scoreText;
+    public static Sprite background = new Sprite(Transform.exSimpleTransform(new Vector2(borderLength, height)), new GameImage(GenerateSolidTexture.generateImage(blockSize*width, blockSize*height, 0xFF2daaff)), new Identity("background"));
+    public static long score;
     public GameManager() {
         super("Game Scene");
+        add(background);
+        gameNameText = new Text();
+        gameNameText.setTranslateX(40);
+        gameNameText.setFill(Color.WHITE);
+        gameNameText.setRotate(-90);
+        gameNameText.setTranslateY(360);
+        gameNameText.setScaleX(2);
+        gameNameText.setScaleY(2);
+
+        addUI(gameNameText);
+
+        scoreText = new Text("Score: " + score);
+        scoreText.setTranslateX(420);
+        scoreText.setFill(Color.WHITE);
+        scoreText.setRotate(90);
+        scoreText.setTranslateY(360);
+        scoreText.setScaleX(2);
+        scoreText.setScaleY(2);
+        addUI(scoreText);
     }
 
     public void StartGame(){
+        score = 0;
+        for (GameObject obj: Main.gameScene.getObjects()){
+            if(obj instanceof Block)
+            {
+                Main.gameScene.remove(obj);
+                obj.setActive(false);
+            }
+        }
+        gameNameText.setText(GameInfo.getAppName());
         blocks = new Block[width][height];
         add(new TetrisController());
         gt = new GameTimer(800, args -> {
@@ -126,6 +167,8 @@ public class GameManager extends GameScene {
                     }
                 }
             }
+            score += totalLines * 100L;
+            scoreText.setText("Score: " + score);
             //printASCII();
         }
     }
