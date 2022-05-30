@@ -21,7 +21,6 @@ public class Main extends Application {
     public static MainMenu mainMenu = new MainMenu();
     public static GameManager gameScene = new GameManager();
     public static Stage stage;
-    static Tetris specialT;
 
     @Override
     public void start(Stage stage) {
@@ -49,10 +48,6 @@ public class Main extends Application {
             if(e.getCode() == KeyCode.F1)
             {
                 GameManager.printASCII();
-            }
-            if(e.getCode() == KeyCode.F2)
-            {
-                System.out.println(specialT.requestMove(0,1));
             }
         });
         stage.setWidth(GameManager.blockSize*GameManager.width + GameManager.borderLength*2);
